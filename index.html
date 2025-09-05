@@ -7,101 +7,101 @@
     <title>لعبة صياد الكلمات - تعلّم العربية</title>
     <style>
          :root {
+            /* أحجام مريحة للجوال */
             --bg: #f9f7f5;
-            --card: #ffffff;
-            --ink: #222;
-            --muted: #666;
+            --card: #fff;
+            --ink: #1f2937;
+            --muted: #6b7280;
             --accent: #ff7043;
-            --ok: #4caf50;
-            --bad: #f44336;
+            --ok: #22c55e;
+            --bad: #ef4444;
             --shadow: 0 8px 20px rgba(0, 0, 0, .08);
-            --cell: 38px;
-            /* 👈 كبّر/صغّر حجم الخلية من هنا */
-            --gap: 8px;
+            /* الخلية تتكيّف مع عرض الشاشة: من 44px إلى 64px */
+            --cell: clamp(44px, 9.5vw, 64px);
+            --gap: clamp(6px, 1.8vw, 10px);
+            --radius: 14px;
+            --base-font: clamp(16px, 3.6vw, 18px);
+            --title: clamp(22px, 5.6vw, 32px);
+            --chip: clamp(12px, 3.2vw, 14px);
+            --btn-pad-y: clamp(10px, 2.4vw, 12px);
+            --btn-pad-x: clamp(12px, 3vw, 16px);
         }
         
         html,
         body {
-            height: 100%;
+            height: 100%
         }
         
         body {
             margin: 0;
             background: var(--bg);
             color: var(--ink);
-            font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Naskh Arabic", "Amiri", "Cairo", Arial, sans-serif;
+            font-family: system-ui, -apple-system, "Segoe UI", "Cairo", "Noto Naskh Arabic", Arial, sans-serif;
+            font-size: var(--base-font);
+            -webkit-tap-highlight-color: transparent;
         }
         
         .app {
             width: min(1100px, 100%);
-            margin: 16px auto;
-            /* يوسّط المحتوى أفقياً ويبدأ من أعلى الصفحة */
+            margin-inline: auto;
+            padding: 12px 12px 24px
         }
         
         header {
-            display: flex;
-            gap: 12px;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 12px;
-            /* يخلي الهيدر ثابت فوق */
             position: sticky;
             top: 0;
-            z-index: 5;
+            z-index: 10;
             background: var(--bg);
-            padding-block: 8px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 2px;
+            border-bottom: 1px solid #eee;
+            backdrop-filter: saturate(1.2) blur(2px);
         }
         
         .title {
             font-weight: 800;
-            font-size: clamp(22px, 2.8vw, 32px);
+            font-size: var(--title);
+            line-height: 1.2
         }
         
         .sub {
             color: var(--muted);
-            font-size: 15px;
-        }
-        
-        .card {
-            background: var(--card);
-            border-radius: 16px;
-            padding: 20px;
-            box-shadow: var(--shadow);
-            border: 1px solid #eee;
-        }
-        
-        .row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            align-items: center;
+            font-size: clamp(13px, 3.2vw, 15px)
         }
         
         .stats {
             display: flex;
-            gap: 12px;
+            gap: 8px;
             align-items: center;
+            flex-wrap: wrap;
+            justify-content: flex-end
         }
         
         .chip {
             background: #fff4ef;
             color: #ff5722;
-            padding: 8px 12px;
+            padding: 6px 10px;
             border-radius: 999px;
-            font-size: 14px;
-            font-weight: 600;
+            font-size: var(--chip);
+            font-weight: 700;
+            border: 1px solid #ffd7c7;
         }
         
         .btn {
             border: 0;
-            padding: 12px 16px;
-            border-radius: 10px;
+            padding: var(--btn-pad-y) var(--btn-pad-x);
+            border-radius: 12px;
             background: var(--accent);
             color: #fff;
             cursor: pointer;
-            font-weight: 700;
-            box-shadow: 0 4px 12px rgba(255, 112, 67, .3);
-            transition: transform .05s ease;
+            font-weight: 800;
+            box-shadow: 0 4px 12px rgba(255, 112, 67, .28);
+            touch-action: manipulation;
+            user-select: none;
+            transition: transform .05s ease, opacity .2s;
         }
         
         .btn:active {
@@ -109,118 +109,128 @@
         }
         
         .btn.secondary {
-            background: #e5e7eb;
+            background: #eef2f7;
             color: #111;
             box-shadow: none;
+            border: 1px solid #e5e7eb
         }
         
         .btn.good {
-            background: var(--ok);
-            box-shadow: 0 4px 12px rgba(76, 175, 80, .25);
+            background: var(--ok)
         }
         
         .btn.bad {
-            background: var(--bad);
-        }
-        /* الشبكة: عدد الأعمدة = gridSize، وحجم الخلية من --cell */
-        
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(var(--cols, 8), var(--cell));
-            gap: var(--gap);
-            margin-top: 20px;
-            width: fit-content;
-            margin-inline: auto;
-            /* توسيط الشبكة */
+            background: var(--bad)
         }
         
-        .grid-cell {
-            width: var(--cell);
-            aspect-ratio: 1;
-            background: #fff;
-            border: 2px solid #e5e7eb;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: calc(var(--cell) * .5);
-            font-weight: 700;
-            cursor: pointer;
-            transition: all .2s ease;
-            user-select: none;
-        }
-        
-        .grid-cell:hover {
-            background: #fef9f6;
-            border-color: #ffdccf;
-        }
-        
-        .grid-cell.selected {
-            background: #ffe9e0;
-            border-color: var(--accent);
-            color: #ff5722;
-        }
-        
-        .grid-cell.correct {
-            /* ألوانها تُضبط inline حسب كل كلمة */
-        }
-        
-        .word-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 20px;
-        }
-        
-        .word-item {
-            background: #f5f5f5;
-            padding: 8px 14px;
-            border-radius: 8px;
-            font-size: 16px;
-            transition: .2s;
-            border: 1px solid transparent;
-        }
-        
-        .word-item.found {
-            text-decoration: line-through;
-            /* اللون والحدّ تُضبط inline حسب لون الكلمة */
+        .card {
+            background: var(--card);
+            border-radius: var(--radius);
+            padding: 16px;
+            box-shadow: var(--shadow);
+            border: 1px solid #eee;
         }
         
         .hint-box {
             background: #fff8e1;
             border: 1px dashed #ffd54f;
-            padding: 18px 20px;
+            padding: 14px;
             border-radius: 12px;
-            margin-top: 20px;
-            color: #ff8f00;
-            font-size: 16px;
+            color: #b45309;
             display: flex;
-            justify-content: space-between;
+            gap: 10px;
             align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        /* الشبكة */
+        
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(var(--cols, 8), var(--cell));
+            gap: var(--gap);
+            margin-top: 14px;
+            width: fit-content;
+            margin-inline: auto;
+            touch-action: none;
+            /* يحسّن سحب الإصبع */
+        }
+        
+        .grid-cell {
+            width: var(--cell);
+            aspect-ratio: 1/1;
+            background: #fff;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: calc(var(--cell)*.54);
+            font-weight: 900;
+            letter-spacing: .5px;
+            transition: all .15s ease;
+            user-select: none;
+        }
+        
+        .grid-cell:hover {
+            background: #fff7f3;
+            border-color: #ffdccf
+        }
+        
+        .grid-cell.selected {
+            background: #ffe9e0;
+            border-color: var(--accent);
+            color: #ff5722
+        }
+        
+        .grid-cell.correct {
+            /* اللون يُطبّق inline */
+        }
+        
+        .word-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 14px;
+            justify-content: center
+        }
+        
+        .word-item {
+            background: #f5f7fa;
+            padding: 8px 12px;
+            border-radius: 10px;
+            font-weight: 700;
+            border: 1px solid #e5e7eb;
+            font-size: clamp(15px, 3.6vw, 16px)
+        }
+        
+        .word-item.found {
+            text-decoration: line-through;
+            background: #fff
         }
         
         .result {
-            margin-top: 20px;
-            font-weight: 800;
-            font-size: 20px;
+            margin-top: 14px;
+            font-weight: 900;
+            font-size: clamp(18px, 4.8vw, 20px);
             display: none;
-            padding: 14px 16px;
+            padding: 12px 14px;
             border-radius: 12px;
-            text-align: center;
+            text-align: center
         }
         
         .result.ok {
             display: block;
             background: #ecfdf5;
             color: #065f46;
-            border: 1px solid #a7f3d0;
+            border: 1px solid #a7f3d0
         }
         
         .result.bad {
             display: block;
             background: #fef2f2;
             color: #7f1d1d;
-            border: 1px solid #fecaca;
+            border: 1px solid #fecaca
         }
         
         .footer {
@@ -228,7 +238,8 @@
             gap: 10px;
             justify-content: space-between;
             align-items: center;
-            margin-top: 16px;
+            margin-top: 12px;
+            flex-wrap: wrap
         }
         
         .progress {
@@ -238,7 +249,7 @@
             background: #e5e7eb;
             border-radius: 999px;
             overflow: hidden;
-            position: relative;
+            position: relative
         }
         
         .progress::after {
@@ -246,23 +257,20 @@
             position: absolute;
             inset: 0;
             width: var(--p);
-            background: linear-gradient(90deg, #ff7043, #ff9800);
+            background: linear-gradient(90deg, #ff7043, #ff9800)
         }
         
         .ribbon {
             position: fixed;
-            inset-inline-end: 12px;
-            inset-block-start: 12px;
+            inset-inline-end: 10px;
+            inset-block-start: 10px;
             background: #fff;
-            padding: 8px 12px;
+            padding: 8px 10px;
             border-radius: 12px;
             box-shadow: var(--shadow);
             border: 1px solid #eee;
-            font-size: 13px;
+            font-size: 12px;
             color: #111;
-            display: flex;
-            gap: 10px;
-            align-items: center;
         }
         
         dialog {
@@ -270,19 +278,19 @@
             border-radius: 16px;
             padding: 0;
             box-shadow: var(--shadow);
-            width: min(600px, 95vw);
-        }
-        
-        .modal-body {
-            padding: 20px;
+            width: min(560px, 95vw)
         }
         
         .modal-head {
-            padding: 16px;
+            padding: 12px 14px;
             border-bottom: 1px solid #eee;
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            align-items: center
+        }
+        
+        .modal-body {
+            padding: 14px
         }
         
         input,
@@ -294,84 +302,101 @@
             border: 1px solid #e5e7eb;
             background: #fff;
             font-family: inherit;
+            font-size: inherit
         }
         
         label {
             font-size: 14px;
-            color: #374151;
+            color: #374151
         }
         
         .grid {
             display: grid;
-            gap: 12px;
-            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            grid-template-columns: 1fr 1fr
         }
         
         .grid>div {
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 6px
         }
         
         .tiny {
             font-size: 13px;
-            color: var(--muted);
+            color: var(--muted)
         }
         
         .level-selector {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-            gap: 16px;
-            margin-bottom: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 12px;
+            margin-bottom: 12px
         }
         
         .level-card {
             background: #fff;
-            border-radius: 14px;
-            padding: 16px;
+            border-radius: 12px;
+            padding: 12px;
             box-shadow: var(--shadow);
             border: 2px solid #eee;
             cursor: pointer;
-            transition: transform .2s, border-color .2s;
+            transition: .2s
         }
         
         .level-card:hover {
-            transform: translateY(-3px);
-            border-color: var(--accent);
+            transform: translateY(-2px);
+            border-color: var(--accent)
         }
         
         .level-card.active {
             border-color: var(--accent);
-            background: #fff8f5;
+            background: #fff8f5
         }
         
         .level-title {
             font-weight: 800;
-            font-size: 18px;
-            margin-bottom: 8px;
+            font-size: 16px;
+            margin-bottom: 6px
         }
         
         .level-desc {
             font-size: 13px;
-            color: var(--muted);
+            color: var(--muted)
         }
         
         .action-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: 12px;
-            gap: 10px;
+            margin-top: 10px;
+            gap: 8px
         }
         
         .action-buttons {
             display: flex;
-            gap: 8px;
+            gap: 8px
         }
+        /* تحسينات للجوال الضيق */
         
-        @media (max-width:600px) {
-            .grid-cell {
-                font-size: calc(var(--cell) * .45);
+        @media (max-width:700px) {
+            .stats {
+                justify-content: flex-start
+            }
+            header {
+                flex-wrap: wrap
+            }
+            .btn {
+                font-size: clamp(14px, 3.6vw, 16px)
+            }
+            .card {
+                padding: 12px
+            }
+            .hint-box {
+                padding: 12px
+            }
+            .word-list {
+                gap: 6px
             }
         }
     </style>
@@ -379,7 +404,7 @@
 
 <body>
     <div class="app">
-        <header class="row">
+        <header>
             <div>
                 <div class="title">🎮 لعبة <span style="color:var(--accent)">صياد الكلمات</span></div>
                 <div class="sub">ابحث عن الكلمات المخفية في الشبكة</div>
@@ -392,19 +417,14 @@
             </div>
         </header>
 
-        <div class="card board">
+        <div class="card">
             <div class="hint-box">
-                <div>
-                    <span>💡 التعليمات:</span>
-                    <strong id="instructionText">ابحث عن الكلمات في الاتجاهات الأفقية والعمودية فقط</strong>
-                </div>
+                <div><span>💡 التعليمات:</span> <strong id="instructionText">ابحث عن الكلمات في الاتجاهات الأفقية والعمودية فقط</strong></div>
                 <div>الكلمات المطلوبة: <span id="wordsFound">0</span>/<span id="totalWords">0</span></div>
             </div>
 
             <div class="grid-container" id="gameGrid"></div>
-
             <div class="word-list" id="wordList"></div>
-
             <div class="result" id="result"></div>
 
             <div class="footer">
@@ -421,7 +441,7 @@
 
     <div class="ribbon">🧠 تقدّمك محفوظ تلقائيًا</div>
 
-    <!-- لوحة المستويات -->
+    <!-- مستويات -->
     <dialog id="levelsDlg">
         <div class="modal-head">
             <strong>اختر المستوى المناسب</strong>
@@ -431,23 +451,23 @@
             <div class="level-selector" id="levelSelector">
                 <div class="level-card" data-level="1">
                     <div class="level-title">المستوى الأول</div>
-                    <div class="level-desc">كلمات بسيطة من 3-4 أحرف</div>
+                    <div class="level-desc">كلمات بسيطة من 3–4 أحرف</div>
                 </div>
                 <div class="level-card" data-level="2">
                     <div class="level-title">المستوى الثاني</div>
-                    <div class="level-desc">كلمات من 4-5 أحرف أكثر تنوعًا</div>
+                    <div class="level-desc">4–5 أحرف متنوعة</div>
                 </div>
                 <div class="level-card" data-level="3">
                     <div class="level-title">المستوى الثالث</div>
-                    <div class="level-desc">كلمات تعبر عن الأنشطة اليومية</div>
+                    <div class="level-desc">أنشطة يومية</div>
                 </div>
                 <div class="level-card" data-level="4">
                     <div class="level-title">المستوى الرابع</div>
-                    <div class="level-desc">كلمات من دروس اللغة العربية</div>
+                    <div class="level-desc">من دروس اللغة</div>
                 </div>
                 <div class="level-card" data-level="5">
                     <div class="level-title">المستوى الخامس</div>
-                    <div class="level-desc">تحدي الكلمات المتقاطعة</div>
+                    <div class="level-desc">تحدّي الكلمات</div>
                 </div>
             </div>
             <div class="action-bar">
@@ -459,45 +479,47 @@
         </div>
     </dialog>
 
-    <!-- لوحة المعلّم -->
+    <!-- وضع المعلّم -->
     <dialog id="teacherDlg">
         <div class="modal-head">
             <strong>وضع المعلّم (إضافة كلمات جديدة)</strong>
             <button class="btn secondary" onclick="teacherDlg.close()">إغلاق</button>
         </div>
         <div class="modal-body">
-            <div class="tiny">أضف كلمات جديدة للعبة. يمكنك تحديد المستوى المناسب لكل مجموعة كلمات.</div>
+            <div class="tiny">أضف كلمات جديدة وستُحفظ محليًا في المتصفح.</div>
             <div class="grid">
                 <div>
-                    <label>الكلمات (افصل بينها بفاصلة):</label>
+                    <label>الكلمات (افصل بفاصلة):</label>
                     <textarea id="tWords" rows="4" placeholder="مثال: قلم، كتاب، مدرسة"></textarea>
                 </div>
                 <div>
                     <label>المستوى:</label>
                     <select id="tLevel">
-            <option value="1">1 (كلمات بسيطة)</option>
-            <option value="2">2 (كلمات متنوعة)</option>
-            <option value="3">3 (الأنشطة اليومية)</option>
-            <option value="4">4 (دروس اللغة العربية)</option>
-            <option value="5">5 (كلمات متقاطعة)</option>
+            <option value="1">1 (بسيط)</option>
+            <option value="2">2 (متنوع)</option>
+            <option value="3">3 (أنشطة)</option>
+            <option value="4">4 (دروس)</option>
+            <option value="5">5 (تحدّي)</option>
           </select>
                 </div>
             </div>
             <div style="margin-top:10px;">
-                <label>ملاحظات للطلاب (اختياري):</label>
+                <label>ملاحظات (اختياري):</label>
                 <input id="tNotes" placeholder="مثال: كلمات من درس الحيوانات">
             </div>
-            <div class="row" style="margin-top:12px;">
-                <button class="btn" id="btnAddWords">إضافة الكلمات ➕</button>
-                <button class="btn bad" id="btnClearAll">حذف الكلمات المضافة 🗑️</button>
+            <div class="action-bar" style="margin-top:12px;">
+                <div class="action-buttons">
+                    <button class="btn" id="btnAddWords">إضافة ➕</button>
+                    <button class="btn bad" id="btnClearAll">حذف كل الإضافات 🗑️</button>
+                </div>
             </div>
-            <div class="tiny" style="margin-top:8px;">نصيحة: أضف كلمات متعلقة بموضوع واحد في كل مرة لتسهيل التعلم.</div>
         </div>
     </dialog>
 
     <script>
         (() => {
-            // ========== بيانات البداية ==========
+
+            /* ===== بيانات افتراضية ===== */
             const builtInBank = {
                 1: [{
                     words: ["قلم", "كتاب", "باب", "علم", "ولد", "بنت"],
@@ -507,11 +529,11 @@
                     notes: "أسماء حيوانات"
                 }, {
                     words: ["ماء", "تمر", "عنب", "موز", "تين", "خبز"],
-                    notes: "أسماء طعام وشراب"
+                    notes: "طعام وشراب"
                 }],
                 2: [{
                     words: ["مدرسة", "معلم", "طالب", "دفتر", "كرسي", "فصل"],
-                    notes: "كلمات من المدرسة"
+                    notes: "من المدرسة"
                 }, {
                     words: ["بيت", "غرفة", "مطبخ", "حمام", "سرير", "باب"],
                     notes: "أجزاء المنزل"
@@ -531,54 +553,52 @@
                 }],
                 4: [{
                     words: ["حديقة", "مزرعة", "شجرة", "زهرة", "عصفور", "فراشة"],
-                    notes: "كلمات من الطبيعة"
+                    notes: "من الطبيعة"
                 }, {
                     words: ["المعلم", "التلميذ", "المدرسة", "الكتاب", "القلم", "السبورة"],
-                    notes: "كلمات بها ال التعريف"
+                    notes: "مع (ال) التعريف"
                 }, {
                     words: ["رسالة", "قصة", "حكاية", "كلمة", "جملة", "حرف"],
-                    notes: "كلمات عن اللغة"
+                    notes: "عن اللغة"
                 }],
                 5: [{
                     words: ["مسجد", "مدرسة", "مستشفى", "متحف", "مكتبة", "متنزه"],
                     notes: "أماكن عامة"
                 }, {
                     words: ["صديق", "أخي", "أمي", "أبي", "جدي", "عمي"],
-                    notes: "الأسرة والأقارب"
+                    notes: "الأسرة"
                 }, {
                     words: ["نظيف", "جميل", "كبير", "صغير", "طويل", "قصير"],
                     notes: "صفات"
                 }]
             };
 
-            // تحميل كلمات المعلّم من التخزين
+            /* ===== تخزين كلمات المعلّم ===== */
             const teacherKey = "wf_teacher_words_v1";
             const loadTeacherWords = () => {
                 try {
-                    return JSON.parse(localStorage.getItem(teacherKey) || "{}");
+                    return JSON.parse(localStorage.getItem(teacherKey) || "{}")
                 } catch {
-                    return {};
+                    return {}
                 }
             };
-            const saveTeacherWords = (data) => localStorage.setItem(teacherKey, JSON.stringify(data || {}));
+            const saveTeacherWords = (d) => localStorage.setItem(teacherKey, JSON.stringify(d || {}));
 
-            // دمج البنوك
             function getFullBank() {
                 const t = loadTeacherWords();
-                const merged = {
+                const m = {
                     1: [...builtInBank[1]],
                     2: [...builtInBank[2]],
                     3: [...builtInBank[3]],
                     4: [...builtInBank[4]],
                     5: [...builtInBank[5]]
                 };
-                for (const lvl of[1, 2, 3, 4, 5]) {
-                    if (t[lvl]) merged[lvl].push(...t[lvl]);
-                }
-                return merged;
+                for (const lvl of[1, 2, 3, 4, 5])
+                    if (t[lvl]) m[lvl].push(...t[lvl]);
+                return m;
             }
 
-            // حالة اللعبة
+            /* ===== حالة اللعبة ===== */
             const stateKey = "wf_state_v1";
 
             function loadState() {
@@ -587,23 +607,21 @@
                         level: 1,
                         score: 0,
                         done: {},
-                        currentLevel: 0,
                         currentPuzzle: 0
-                    };
+                    }
                 } catch {
                     return {
                         level: 1,
                         score: 0,
                         done: {},
-                        currentLevel: 0,
                         currentPuzzle: 0
-                    };
+                    }
                 }
             }
             const state = loadState();
             const saveState = () => localStorage.setItem(stateKey, JSON.stringify(state));
 
-            // عناصر DOM
+            /* عناصر */
             const el = {
                 levelNow: document.getElementById("levelNow"),
                 scoreNow: document.getElementById("scoreNow"),
@@ -629,25 +647,21 @@
                 tLevel: document.getElementById("tLevel"),
                 tNotes: document.getElementById("tNotes"),
                 btnAddWords: document.getElementById("btnAddWords"),
-                btnClearAll: document.getElementById("btnClearAll")
+                btnClearAll: document.getElementById("btnClearAll"),
             };
 
-            // مؤثر صوتي بسيط
+            /* ===== صوتيات: متوافقة مع الجوال ===== */
             const ctx = new(window.AudioContext || window.webkitAudioContext)();
-            // تأكيد تشغيل الصوت (يفكّ القفل مرة واحدة)
+
             function ensureAudio() {
                 if (ctx && ctx.state !== 'running') {
                     ctx.resume().catch(() => {});
                 }
             }
-            // أول تفاعل من المستخدم نفك القفل
-            ['pointerdown', 'touchstart', 'keydown', 'click'].forEach(evt => {
-                window.addEventListener(evt, () => ensureAudio(), {
-                    once: true,
-                    passive: true
-                });
-            });
-            // لو رجعت الصفحة من الخلفية وكان السياق معلّق
+            ['pointerdown', 'touchstart', 'keydown', 'click'].forEach(e => window.addEventListener(e, () => ensureAudio(), {
+                once: true,
+                passive: true
+            }));
             document.addEventListener('visibilitychange', () => {
                 if (document.visibilityState === 'visible') ensureAudio();
             });
@@ -664,166 +678,140 @@
                 setTimeout(() => o.stop(), ms);
             }
 
-            const rand = (arr) => arr[Math.floor(Math.random() * arr.length)];
+            const rand = arr => arr[Math.floor(Math.random() * arr.length)];
 
-            // متغيرات اللعبة
-            let gridSize = 8;
-            let grid = [];
-            let words = [];
-            let foundWords = [];
-            let selectedCells = [];
-            let currentDirection = null;
-
-            // عدّادات لتوازن الاتجاهات (نص بالنص)
-            let placedHoriz = 0;
-            let placedVert = 0;
-
-            // ألوان لكل كلمة
+            /* ===== متغيّرات الشبكة ===== */
+            let gridSize = 8,
+                grid = [],
+                words = [],
+                foundWords = [],
+                selectedCells = [],
+                currentDirection = null;
+            let placedHoriz = 0,
+                placedVert = 0;
             const COLORS = ['#EF4444', '#F59E0B', '#10B981', '#3B82F6', '#8B5CF6', '#EC4899', '#14B8A6', '#F97316'];
-            const wordColors = {}; // word -> color
+            const wordColors = {};
 
-            // Fallback بسيط لـ CSS.escape (لدعم متصفحات قديمة)
             if (typeof window.CSS === 'undefined') window.CSS = {};
             if (typeof window.CSS.escape !== 'function') {
-                window.CSS.escape = (s) => s.replace(/[^a-zA-Z0-9_\u0600-\u06FF-]/g, '\\$&');
+                window.CSS.escape = s => s.replace(/[^a-zA-Z0-9_\u0600-\u06FF-]/g, '\\$&');
             }
 
-            // إنشاء شبكة جديدة
             function createGrid(size) {
                 gridSize = size;
                 grid = [];
                 for (let i = 0; i < size; i++) {
                     grid[i] = [];
-                    for (let j = 0; j < size; j++) {
-                        grid[i][j] = '';
-                    }
+                    for (let j = 0; j < size; j++) grid[i][j] = '';
                 }
             }
 
-            // حجم الشبكة حسب المستوى (لتقليل عدد الحروف العشوائية)
             function gridSizeForLevel(level) {
                 switch (level) {
                     case 1:
-                        return 4; // كلمات قصيرة
-                    case 2:
                         return 5;
-                    case 3:
+                    case 2:
                         return 6;
-                    case 4:
+                    case 3:
                         return 7;
-                    case 5:
+                    case 4:
+                        return 8;
                     default:
-                        return 8; // مستوى أعلى
+                        return 9;
                 }
             }
 
-            // تحديث العرض المرئي للشبكة
             function renderGrid() {
                 el.gameGrid.style.setProperty('--cols', gridSize);
                 el.gameGrid.innerHTML = '';
-                for (let i = 0; i < gridSize; i++) {
+                for (let i = 0; i < gridSize; i++)
                     for (let j = 0; j < gridSize; j++) {
                         const cell = document.createElement('div');
                         cell.className = 'grid-cell';
                         cell.dataset.row = i;
                         cell.dataset.col = j;
                         cell.textContent = grid[i][j] || '';
-                        cell.addEventListener('mousedown', (e) => startSelection(i, j, e));
-                        cell.addEventListener('mouseover', (e) => continueSelection(i, j, e));
-                        cell.addEventListener('touchstart', (e) => {
+                        cell.addEventListener('mousedown', () => startSelection(i, j));
+                        cell.addEventListener('mouseover', () => continueSelection(i, j));
+                        cell.addEventListener('touchstart', e => {
                             e.preventDefault();
-                            startSelection(i, j, e);
+                            startSelection(i, j);
                         });
-                        cell.addEventListener('touchmove', (e) => {
+                        cell.addEventListener('touchmove', e => {
                             e.preventDefault();
                             const t = e.touches[0];
-                            const elAt = document.elementFromPoint(t.clientX, t.clientY);
-                            if (elAt && elAt.classList.contains('grid-cell')) {
-                                const r = parseInt(elAt.dataset.row);
-                                const c = parseInt(elAt.dataset.col);
-                                continueSelection(r, c, e);
+                            const at = document.elementFromPoint(t.clientX, t.clientY);
+                            if (at && at.classList.contains('grid-cell')) {
+                                continueSelection(parseInt(at.dataset.row), parseInt(at.dataset.col));
                             }
                         });
                         el.gameGrid.appendChild(cell);
                     }
-                }
-                document.addEventListener('mouseup', endSelection);
-                document.addEventListener('touchend', endSelection);
+                document.addEventListener('mouseup', endSelection, {
+                    passive: true
+                });
+                document.addEventListener('touchend', endSelection, {
+                    passive: true
+                });
             }
 
-            // قائمة الكلمات
             function renderWordList() {
                 el.wordList.innerHTML = '';
-                words.forEach(word => {
-                    const item = document.createElement('div');
-                    item.className = 'word-item' + (foundWords.includes(word) ? ' found' : '');
-                    item.textContent = word;
-                    item.dataset.word = word;
-
-                    // لو الكلمة لها لون، طبّقه
-                    if (foundWords.includes(word) && wordColors[word]) {
-                        item.style.color = wordColors[word];
-                        item.style.border = `1px solid ${wordColors[word]}`;
-                        item.style.background = '#fff';
+                words.forEach(w => {
+                    const d = document.createElement('div');
+                    d.className = 'word-item' + (foundWords.includes(w) ? ' found' : '');
+                    d.textContent = w;
+                    d.dataset.word = w;
+                    if (foundWords.includes(w) && wordColors[w]) {
+                        d.style.color = wordColors[w];
+                        d.style.borderColor = wordColors[w];
+                        d.style.background = '#fff';
                     }
-
-                    el.wordList.appendChild(item);
+                    el.wordList.appendChild(d);
                 });
                 el.wordsFound.textContent = foundWords.length;
                 el.totalWords.textContent = words.length;
             }
 
-            // محاولة وضع جميع الكلمات
             function validateWordPlacement() {
-                let attemptCount = 0,
-                    maxAttempts = 5;
-                while (attemptCount < maxAttempts) {
-                    // تصفير العدّادات كل محاولة
+                let attempts = 0,
+                    max = 6;
+                while (attempts < max) {
                     placedHoriz = 0;
                     placedVert = 0;
-
                     createGrid(gridSize);
-                    let allWordsPlaced = true;
+                    let ok = true;
                     for (const w of words) {
                         if (!placeWord(w)) {
-                            allWordsPlaced = false;
+                            ok = false;
                             break;
                         }
                     }
-                    if (allWordsPlaced) return true;
-                    attemptCount++;
+                    if (ok) return true;
+                    attempts++;
                 }
-                console.warn("لم نتمكن من وضع جميع الكلمات بعد عدة محاولات");
                 return false;
             }
 
-            // دالة وضع كلمة مع توازن الاتجاهات + الأربعة اتجاهات
             function placeWord(word) {
                 const horizontal = [
-                    [0, 1],
-                    [0, -1]
-                ]; // يمين/يسار
-                const vertical = [
-                    [1, 0],
-                    [-1, 0]
-                ]; // أسفل/أعلى
-
-                // نفضّل المجموعة الأقل عدداً حتى الآن (نص بالنص فعلي)
-                const preferHorizontal = placedHoriz <= placedVert;
-                const groups = preferHorizontal ? [horizontal, vertical] : [vertical, horizontal];
-
+                        [0, 1],
+                        [0, -1]
+                    ],
+                    vertical = [
+                        [1, 0],
+                        [-1, 0]
+                    ];
+                const preferH = placedHoriz <= placedVert,
+                    groups = preferH ? [horizontal, vertical] : [vertical, horizontal];
                 for (const group of groups) {
-                    const dirs = group.slice().sort(() => Math.random() - 0.5);
+                    const dirs = group.slice().sort(() => Math.random() - .5);
                     for (const [dy, dx] of dirs) {
-                        for (let attempt = 0; attempt < 60; attempt++) {
-                            const row = Math.floor(Math.random() * gridSize);
-                            const col = Math.floor(Math.random() * gridSize);
-                            if (canPlaceWord(word, row, col, dy, dx)) {
-                                for (let i = 0; i < word.length; i++) {
-                                    const r = row + i * dy,
-                                        c = col + i * dx;
-                                    grid[r][c] = word[i];
-                                }
+                        for (let a = 0; a < 60; a++) {
+                            const r = Math.floor(Math.random() * gridSize),
+                                c = Math.floor(Math.random() * gridSize);
+                            if (canPlaceWord(word, r, c, dy, dx)) {
+                                for (let i = 0; i < word.length; i++) grid[r + i * dy][c + i * dx] = word[i];
                                 if (dy === 0) placedHoriz++;
                                 else placedVert++;
                                 return true;
@@ -844,17 +832,13 @@
                 return true;
             }
 
-            // ملء باقي الشبكة
             function fillRandomLetters() {
-                const arabicLetters = "أبتثجحخدذرزسشصضطظعغفقكلمنهوي";
-                for (let i = 0; i < gridSize; i++) {
-                    for (let j = 0; j < gridSize; j++) {
-                        if (!grid[i][j]) grid[i][j] = arabicLetters[Math.floor(Math.random() * arabicLetters.length)];
-                    }
-                }
+                const letters = "أبتثجحخدذرزسشصضطظعغفقكلمنهوي";
+                for (let i = 0; i < gridSize; i++)
+                    for (let j = 0; j < gridSize; j++)
+                        if (!grid[i][j]) grid[i][j] = letters[Math.floor(Math.random() * letters.length)];
             }
 
-            // اختيار الحروف
             function startSelection(row, col) {
                 clearSelection();
                 selectedCells.push({
@@ -866,30 +850,25 @@
             }
 
             function continueSelection(row, col) {
-                if (selectedCells.length === 0) return;
+                if (!selectedCells.length) return;
                 if (selectedCells.some(c => c.row === row && c.col === col)) return;
-
                 const first = selectedCells[0],
                     last = selectedCells[selectedCells.length - 1];
-
                 if (selectedCells.length === 1) {
-                    if (row === first.row) {
-                        currentDirection = {
-                            dy: 0,
-                            dx: Math.sign(col - first.col)
-                        };
-                    } else if (col === first.col) {
-                        currentDirection = {
-                            dy: Math.sign(row - first.row),
-                            dx: 0
-                        };
-                    } else return;
+                    if (row === first.row) currentDirection = {
+                        dy: 0,
+                        dx: Math.sign(col - first.col)
+                    };
+                    else if (col === first.col) currentDirection = {
+                        dy: Math.sign(row - first.row),
+                        dx: 0
+                    };
+                    else return;
                 } else {
                     const er = last.row + currentDirection.dy,
                         ec = last.col + currentDirection.dx;
                     if (row !== er || col !== ec) return;
                 }
-
                 selectedCells.push({
                     row,
                     col
@@ -898,28 +877,21 @@
             }
 
             function endSelection() {
-                if (selectedCells.length === 0) return;
+                if (!selectedCells.length) return;
                 const selectedWord = selectedCells.map(c => grid[c.row][c.col]).join('');
                 if (words.includes(selectedWord) && !foundWords.includes(selectedWord)) {
                     foundWords.push(selectedWord);
-
-                    // لون ثابت لهذه الكلمة
-                    const paletteIndex = Object.keys(wordColors).length % COLORS.length;
-                    const color = wordColors[selectedWord] || (wordColors[selectedWord] = COLORS[paletteIndex]);
-
-                    // لوّن الخلايا الصحيحة
+                    const idx = Object.keys(wordColors).length % COLORS.length,
+                        color = wordColors[selectedWord] || (wordColors[selectedWord] = COLORS[idx]);
                     markCellsAsCorrect(color);
-
-                    // حدّث القائمة ولوّن العنصر
                     renderWordList();
-                    const item = el.wordList.querySelector(`[data-word="${CSS.escape(selectedWord)}"]`);
+                    const item = document.querySelector(`[data-word="${CSS.escape(selectedWord)}"]`);
                     if (item) {
                         item.classList.add('found');
                         item.style.color = color;
                         item.style.border = `1px solid ${color}`;
                         item.style.background = '#fff';
                     }
-
                     beep(1200, 120, "square", .03);
                     state.score += 10;
                     el.scoreNow.textContent = state.score;
@@ -934,8 +906,8 @@
             }
 
             function updateSelectedCells() {
-                document.querySelectorAll('.grid-cell.selected').forEach(cell => {
-                    if (!cell.classList.contains('correct')) cell.classList.remove('selected');
+                document.querySelectorAll('.grid-cell.selected').forEach(c => {
+                    if (!c.classList.contains('correct')) c.classList.remove('selected');
                 });
                 selectedCells.forEach(({
                     row,
@@ -946,7 +918,6 @@
                 });
             }
 
-            // تلوين الخلايا الصحيحة بلون الكلمة
             function markCellsAsCorrect(color = '#4caf50') {
                 selectedCells.forEach(({
                     row,
@@ -964,37 +935,34 @@
             }
 
             function clearSelection() {
-                document.querySelectorAll('.grid-cell.selected').forEach(cell => {
-                    if (!cell.classList.contains('correct')) cell.classList.remove('selected');
+                document.querySelectorAll('.grid-cell.selected').forEach(c => {
+                    if (!c.classList.contains('correct')) c.classList.remove('selected');
                 });
                 selectedCells = [];
             }
 
-            // تلميح يدعم الاتجاهات الأربعة (وبلون الكلمة إن وُجد)
             function useHint() {
-                const remaining = words.filter(w => !foundWords.includes(w));
-                if (remaining.length === 0) return;
-                const w = rand(remaining);
-
-                for (let i = 0; i < gridSize; i++) {
+                const remain = words.filter(w => !foundWords.includes(w));
+                if (!remain.length) return;
+                const w = rand(remain);
+                for (let i = 0; i < gridSize; i++)
                     for (let j = 0; j < gridSize; j++) {
-                        const directions = [
-                            [0, 1], // أفقي يمين
-                            [0, -1], // أفقي يسار
-                            [1, 0], // عمودي أسفل
-                            [-1, 0], // عمودي أعلى
+                        const dirs = [
+                            [0, 1],
+                            [0, -1],
+                            [1, 0],
+                            [-1, 0]
                         ];
-                        for (const [dy, dx] of directions) {
-                            if (checkWordAtPosition(w, i, j, dy, dx)) {
+                        for (const [dy, dx] of dirs) {
+                            if (checkWordAt(w, i, j, dy, dx)) {
                                 flashWord(w, i, j, dy, dx);
                                 return;
                             }
                         }
                     }
-                }
             }
 
-            function checkWordAtPosition(word, row, col, dy, dx) {
+            function checkWordAt(word, row, col, dy, dx) {
                 if (row + dy * (word.length - 1) >= gridSize || row + dy * (word.length - 1) < 0) return false;
                 if (col + dx * (word.length - 1) >= gridSize || col + dx * (word.length - 1) < 0) return false;
                 for (let i = 0; i < word.length; i++) {
@@ -1006,21 +974,18 @@
             }
 
             function flashWord(word, row, col, dy, dx) {
-                const color = wordColors[word] || '#ffd54f';
-                const cells = [];
+                const color = wordColors[word] || '#ffd54f',
+                    cells = [];
                 for (let i = 0; i < word.length; i++) {
                     const r = row + i * dy,
                         c = col + i * dx;
                     const cell = document.querySelector(`.grid-cell[data-row="${r}"][data-col="${c}"]`);
                     if (cell) {
                         cells.push(cell);
-                        cell.style.transition = "outline-color 0.3s, outline-width 0.3s";
                         cell.style.outline = `3px solid ${color}`;
                     }
                 }
-                setTimeout(() => cells.forEach(c => {
-                    c.style.outline = "";
-                }), 1000);
+                setTimeout(() => cells.forEach(c => c.style.outline = ''), 900);
                 state.score = Math.max(0, state.score - 5);
                 el.scoreNow.textContent = state.score;
                 saveState();
@@ -1028,7 +993,7 @@
 
             function puzzleCompleted() {
                 el.result.className = "result ok";
-                el.result.textContent = "🎉 أحسنت! لقد وجدت جميع الكلمات";
+                el.result.textContent = "🎉 أحسنت! وجدتِ كل الكلمات";
                 el.result.style.display = "block";
                 el.btnNext.disabled = false;
                 state.score += 10;
@@ -1037,44 +1002,24 @@
                 confetti();
             }
 
-            function getWordSet() {
-                const bank = getFullBank()[state.level];
-                if (!bank || bank.length === 0) return {
-                    words: [],
-                    notes: "لا توجد كلمات"
-                };
-                if (state.currentPuzzle >= bank.length) state.currentPuzzle = 0;
-                return bank[state.currentPuzzle];
-            }
-
-            // مؤثر بسيط
             function confetti() {
-                const n = 25,
-                    dur = 1200;
+                const n = 22;
                 for (let i = 0; i < n; i++) {
-                    const p = document.createElement("div");
-                    p.style.position = "fixed";
-                    p.style.width = "10px";
-                    p.style.height = "10px";
-                    p.style.background = `hsl(${Math.random()*360},90%,60%)`;
-                    p.style.insetInlineStart = (Math.random() * 80 + 10) + "vw";
-                    p.style.insetBlockStart = "0vh";
-                    p.style.borderRadius = "2px";
-                    p.style.transform = `rotate(${Math.random()*360}deg)`;
-                    p.style.zIndex = 9999;
+                    const p = document.createElement('div');
+                    p.style.cssText = `position:fixed;width:10px;height:10px;background:hsl(${Math.random()*360},90%,60%);inset-inline-start:${(Math.random()*80+10)}vw;inset-block-start:0;border-radius:2px;z-index:9999`;
                     document.body.appendChild(p);
                     p.animate([{
-                        transform: `translateY(0) rotate(0deg)`
+                        transform: 'translateY(0) rotate(0deg)'
                     }, {
                         transform: `translateY(80vh) rotate(${Math.random()*720-360}deg)`
                     }], {
-                        duration: dur + Math.random() * 600,
+                        duration: 1200 + Math.random() * 700,
                         easing: "cubic-bezier(.2,.7,.2,1)"
                     }).onfinish = () => p.remove();
                 }
             }
 
-            // إعداد مختار المستويات
+            /* مستويات + تقدّم */
             function setupLevelSelector() {
                 const cards = el.levelSelector.querySelectorAll('.level-card');
                 cards.forEach(card => {
@@ -1100,12 +1045,6 @@
                 updateProgress();
             }
 
-            function isPuzzleCompleted() {
-                if (!state.done[state.level]) return false;
-                const key = `${state.level}-${state.currentPuzzle}`;
-                return state.done[state.level].includes(key);
-            }
-
             function nextPuzzle() {
                 state.currentPuzzle++;
                 const bank = getFullBank()[state.level];
@@ -1116,64 +1055,61 @@
 
             function updateProgress() {
                 const bank = getFullBank()[state.level];
-                if (!bank || bank.length === 0) return;
+                if (!bank || !bank.length) return;
                 const total = bank.length;
                 let completed = 0;
-                if (state.done[state.level]) {
-                    bank.forEach((_, idx) => {
-                        const key = `${state.level}-${idx}`;
-                        if (state.done[state.level].includes(key)) completed++;
-                    });
-                }
-                const percent = Math.round(100 * completed / total);
-                el.progress.style.setProperty("--p", percent + "%");
+                if (state.done[state.level]) bank.forEach((_, i) => {
+                    const k = `${state.level}-${i}`;
+                    if (state.done[state.level].includes(k)) completed++;
+                });
+                const p = Math.round(100 * completed / total);
+                el.progress.style.setProperty('--p', p + '%');
             }
 
-            // إنشاء لغز جديد
+            function getWordSet() {
+                const bank = getFullBank()[state.level];
+                if (!bank || !bank.length) return {
+                    words: [],
+                    notes: "لا توجد كلمات"
+                };
+                if (state.currentPuzzle >= bank.length) state.currentPuzzle = 0;
+                return bank[state.currentPuzzle];
+            }
+
+            /* إنشاء لغز جديد */
             function createNewPuzzle() {
                 foundWords = [];
                 selectedCells = [];
                 currentDirection = null;
-
-                // 👇 حجم الشبكة حسب المستوى لتقليل الزحمة
                 gridSize = gridSizeForLevel(state.level);
-
-                const wordSet = getWordSet();
-                words = wordSet.words;
-
-                // ترتيب الأطول أولاً يساعد ينجح الوضع
-                words = [...words].sort((a, b) => b.length - a.length);
-
-                el.instructionText.textContent = wordSet.notes || "ابحث عن الكلمات في الاتجاهات الأفقية والعمودية فقط";
+                const ws = getWordSet();
+                words = [...ws.words].sort((a, b) => b.length - a.length);
+                el.instructionText.textContent = ws.notes || "ابحث عن الكلمات أفقياً وعمودياً";
                 el.levelNow.textContent = state.level;
                 el.scoreNow.textContent = state.score;
-
                 const ok = validateWordPlacement();
                 if (!ok) {
                     createGrid(gridSize);
-                    // تصفير العدّادات قبل الخطة الاحتياطية
                     placedHoriz = 0;
                     placedVert = 0;
                     words.forEach(w => placeWord(w));
                 }
-
                 fillRandomLetters();
                 renderGrid();
                 renderWordList();
-
                 el.result.style.display = "none";
                 el.btnNext.disabled = true;
                 updateProgress();
             }
 
-            // بدء اللعبة
+            /* بداية */
             setupLevelSelector();
             createNewPuzzle();
 
-            // أزرار
+            /* أزرار */
             el.btnHint.addEventListener("click", useHint);
             el.btnReset.addEventListener("click", () => {
-                if (confirm("هل تريد إعادة بدء اللعبة من البداية؟")) {
+                if (confirm("إعادة اللعبة بالكامل؟")) {
                     state.level = 1;
                     state.score = 0;
                     state.currentPuzzle = 0;
@@ -1182,7 +1118,7 @@
                 }
             });
             el.btnResetLevel.addEventListener("click", () => {
-                if (confirm("هل تريد إعادة تعيين المستوى الحالي؟")) createNewPuzzle();
+                if (confirm("إعادة المستوى الحالي؟")) createNewPuzzle();
             });
             el.btnNext.addEventListener("click", nextPuzzle);
             el.btnTeacher.addEventListener("click", () => el.teacherDlg.showModal());
@@ -1190,42 +1126,36 @@
                 setupLevelSelector();
                 el.levelsDlg.showModal();
             });
-
             el.btnClearLevelProgress.addEventListener("click", () => {
-                if (confirm(`هل تريد إعادة تعيين التقدم للمستوى ${state.level}؟`)) {
+                if (confirm(`إعادة تعيين تقدم المستوى ${state.level}؟`)) {
                     if (state.done[state.level]) {
                         state.done[state.level] = [];
                         saveState();
-                        alert(`تم إعادة تعيين المستوى ${state.level}`);
+                        alert("تم.");
                         el.levelsDlg.close();
                         createNewPuzzle();
                     }
                 }
             });
             el.btnClearAllProgress.addEventListener("click", () => {
-                if (confirm("هل تريد إعادة تعيين كل التقدم في جميع المستويات؟")) {
+                if (confirm("مسح كل التقدم؟")) {
                     state.done = {};
                     state.score = 0;
                     saveState();
-                    alert("تم إعادة تعيين كل التقدم");
+                    alert("تم.");
                     el.levelsDlg.close();
                     createNewPuzzle();
                 }
             });
-
             el.btnAddWords.addEventListener("click", () => {
-                const wordsInput = (el.tWords.value || "").trim();
-                if (!wordsInput) {
-                    alert("أضف الكلمات أولاً (مفصولة بفواصل)");
+                const text = (el.tWords.value || "").trim();
+                if (!text) {
+                    alert("أدخل الكلمات أولاً");
                     return;
                 }
-                const list = wordsInput.split(/[,،]/).map(w => w.trim()).filter(w => w.length > 0);
-                if (list.length === 0) {
-                    alert("لم يتم العثور على كلمات صالحة");
-                    return;
-                }
+                const list = text.split(/[,،]/).map(w => w.trim()).filter(Boolean);
                 const lvl = parseInt(el.tLevel.value || "1");
-                const notes = (el.tNotes.value || "").trim() || "كلمات مضافة من المعلم";
+                const notes = (el.tNotes.value || "").trim() || "كلمات المعلّم";
                 const data = loadTeacherWords();
                 if (!data[lvl]) data[lvl] = [];
                 data[lvl].push({
@@ -1235,7 +1165,7 @@
                 saveTeacherWords(data);
                 el.tWords.value = "";
                 el.tNotes.value = "";
-                alert("تمت الإضافة ✅ ستظهر في المستوى عند التشغيل التالي.");
+                alert("أُضيفت ✅ ستظهر في المستوى.");
             });
             el.btnClearAll.addEventListener("click", () => {
                 if (confirm("حذف كل كلمات المعلّم؟")) {
